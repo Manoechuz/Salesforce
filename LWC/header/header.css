@@ -1,0 +1,17 @@
+.zoom-in img {
+    
+    transition: transform 0.01s ease;
+    transform: scale(0.35);
+}
+
+.zoom-out img {
+
+    transition: transform 0.01s ease;
+    transform: scale(0.35);
+}
+
+.distance{
+    text-align: center;
+    margin-top: -29%;
+    margin-bottom: -29%;
+}

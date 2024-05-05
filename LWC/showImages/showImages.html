@@ -1,0 +1,23 @@
+<template>
+    <div class="slds-align_absolute-center">
+        <div class="slds-size_1-of-4">
+            <!-- Check if imgExist has items -->
+            <template if:true={imgExist.length}>
+                <lightning-carousel>
+                    <template for:each={imgExist} for:item="img">
+                        <lightning-carousel-image key={img} src={img} header={productRecord.Name.value}
+                            alternative-text="Image">
+                        </lightning-carousel-image>
+                    </template>
+                </lightning-carousel>
+            </template>
+
+            <!-- Display this when imgExist is empty -->
+            <template if:false={imgExist.length}>
+                <div>
+                    <p>No images available</p>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

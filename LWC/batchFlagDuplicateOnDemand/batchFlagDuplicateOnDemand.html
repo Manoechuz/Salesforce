@@ -1,0 +1,58 @@
+<template>
+    <lightning-card title="Flag Duplicate Account On Demand" icon-name="standard:account">
+        <div class="slds-p-horizontal_xx-large">
+            <lightning-layout-item>
+                <lightning-combobox label='Choose a Brand' value={currBrand} options={options.data}
+                    onchange={handleComboChange}>
+                </lightning-combobox>
+            </lightning-layout-item>
+
+            <div style="
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
+            ">
+                <div style="width: 90%;">
+                    <lightning-layout-item>
+                        <lightning-input label="From Date" type="date" value={fromDate} onchange={handleFromDateChange}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                </div>
+                <div>
+                    <button class="slds-button slds-button_neutral" onclick={setFromToday} label="Today">Today</button>
+                </div>
+            </div>
+
+            <div style="
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
+            ">
+                <div style="width: 90%;">
+
+                    <lightning-layout-item>
+                        <lightning-input label="To Date" type="date" value={toDate} onchange={handleToDateChange}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                </div>
+                <div>
+                    <button class="slds-button slds-button_neutral" onclick={setToToday} label="Today">Today</button>
+                </div>
+            </div>
+            <template if:true={isLoading}>
+                <div style="position: relative; height: 5rem;" class="slds-m-around_medium slds-align_absolute-center">
+                    <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                </div>
+            </template>
+            <template if:false={isLoading}>
+                <div class="slds-m-around_medium slds-align_absolute-center">
+                    <lightning-button label="Flag Duplicates Accounts" onclick={handleFlagDuplicateAccounts}
+                        variant="brand"></lightning-button>
+
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>
