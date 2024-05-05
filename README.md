@@ -1,4 +1,4 @@
 # Salesforce
-My collaboration in salesforce
-Here you can find my Ligthning Web Component (LWC) that i had design
-And also all my Apex Code
+My collaboration in salesforce.  Here you can find :
+- Ligthning Web Component (LWC) that i design
+- My Apex Code (Batch, Trigger and REST API).
