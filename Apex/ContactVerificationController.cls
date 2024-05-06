@@ -1,71 +1,97 @@
 public without sharing class ContactVerificationController {
     @AuraEnabled
-    public static String confirmationIsUpdate(String contactId, String vToken) {
+    public static String emailConfirmation(String contactId, String vToken) {
 
-        String result = '0';
+        Map<String, Object> response = new Map<String, Object>();
+
         List<Contact> contacts = [SELECT Id, vToken__c, emailVerify__c FROM Contact WHERE Id = :contactId LIMIT 1];
 
-        if (contacts.size() > 0 && contacts[0].vToken__c == hashPassword(vToken) && contacts[0].emailVerify__c == false) {
-            contacts[0].emailVerify__c = true;
-            Database.SaveResult s = Database.update(contacts[0]);
+        if (contacts.size() > 0 && contacts[0].vToken__c == hashPassword(vToken) && !contacts[0].emailVerify__c) {
+
+            Contact contact = contacts[0];
+
+            contact.emailVerify__c = true;
+            Database.SaveResult s = Database.update(contact);
 
             if(!s.isSuccess()){
-                result = '0';
-                for(Database.Error e : s.getErrors()){
-                    System.debug('The error is ' + e.getMessage());
+                String errorMsg = '';
+                for(Database.Error err : s.getErrors()){
+                    errorMsg += err.getMessage() + '; ';
                 }
+                response.put('status', 0);
+                response.put('isSuccess', false);
+                response.put('message', 'Update failed: ' + errorMsg);
             }
             else{
-                result = '1';
+                response.put('status', 1);
+                response.put('isSuccess', true);
+                response.put('message', 'Email verification successful.');
             }
 
-            return result;
+            return JSON.serialize(response);
+
         }
 
         else if (contacts.size() == 0) {
-            result = '4';
+            response.put('status', 4);
+            response.put('isSuccess', false);
+            response.put('message', 'No contact found with the given ID.');
         }
         else if(contacts[0].vToken__c != hashPassword(vToken)){
-            result = '2';
+            response.put('status', 2);
+            response.put('isSuccess', false);
+            response.put('message', 'Verification token mismatch.');
         }
         else if (contacts[0].emailVerify__c == true) {
-            result = '3';
+            response.put('status', 3);
+            response.put('isSuccess', false);
+            response.put('message', 'Email already verified.');
         }
-        return result;
+        return JSON.serialize(response);
     }
 
 
     @AuraEnabled
     public static String passwordUpdate(String contactId, String rToken, String newPassword) {
 
-        String result = '0';
+        Map<String, Object> response = new Map<String, Object>();
+
         List<Contact> contacts = [SELECT Id, rToken__c, Password__c FROM Contact WHERE Id = :contactId LIMIT 1];
 
         if (contacts.size() == 1 && contacts[0].rToken__c == hashPassword(rToken)) {
-            contacts[0].Password__c = hashPassword(newPassword);
+            Contact contact = contacts[0];
+            contact.Password__c = hashPassword(newPassword);
 
-            Database.SaveResult s = Database.update(contacts[0]);
+            Database.SaveResult s = Database.update(contact);
             if(!s.isSuccess()){
-                result = '0';
+                String errorMsg = '';
                 for(Database.Error e : s.getErrors()){
                     System.debug('The error is ' + e.getMessage());
                 }
+                response.put('status', 0);
+                response.put('isSuccess', false);
+                response.put('message', 'Update failed: ' + errorMsg);
             }
             else{
-                result = '1';
+                response.put('status', 1);
+                response.put('isSuccess', true);
+                response.put('message', 'Password reset successfully !');
             }
-
-            return result;
+            return JSON.serialize(response);
         }
         
         else if (contacts.size() == 0) {
-            result = '3';
+            response.put('status', 3);
+            response.put('isSuccess', false);
+            response.put('message', 'Contact not registered to Salesforce.');
         }
         else if(contacts[0].rToken__c != hashPassword(rToken)){
-            result = '2';
+            response.put('status', 2);
+            response.put('isSuccess', false);
+            response.put('message', 'Verification token mismatch.');
         }
 
-        return result;
+        return JSON.serialize(response);
     }
 
     public static String hashPassword(String password) {
