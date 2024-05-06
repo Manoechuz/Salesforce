@@ -1,0 +1,10 @@
+.card {
+    font-family: Arial, sans-serif;
+    width: 400px;
+    margin: 50px auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
