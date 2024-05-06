@@ -7,13 +7,12 @@ export default class ResetPassword extends LightningElement {
 
     @api contactId;
     @api rToken;
+    @api msgToDisplay = ''; // Message that will display the result
 
-    email = '';
-    newPassword = '';
-    confirmPassword = '';
+    newPassword = ''; // current new password entered by the user
+    confirmPassword = ''; // current confirm password entered by the user
 
     isResetting = false; // Flag to show spinner
-    isReset = false; // Flag to show success message
     isError = false; // Flag to show error message
     isHome = true; // Flag to show home form
     passwordsNotMatch = false; // Flag to show error message
@@ -23,9 +22,6 @@ export default class ResetPassword extends LightningElement {
 
     cantRun = false; // flag to show message
     firstTime = true; // flag to show message
-
-    isTwo = false; 
-    isThree = false;
 
     isClicked = true;
 
@@ -55,7 +51,6 @@ export default class ResetPassword extends LightningElement {
                 this.passwordsIsMatch = true;
                 this.passwordsNotMatch = false;
             }
-
         }
         
         if(!this.firstTime){
@@ -108,24 +103,9 @@ export default class ResetPassword extends LightningElement {
         .then(result => {
 
             this.isResetting = false;
-
-            switch (result) {
-                case '1':
-                    this.isReset = true;
-                    break;
-                case '0':
-                    this.isError = true;
-                    break;
-                case '2':
-                    this.isTwo = true;
-                    break;
-                case '3':
-                    this.isThree = true;
-                    break;
-                default:
-                    this.isError = true;
-                    break;
-            }
+            
+            let response = JSON.parse(result);
+            this.msgToDisplay = response.message;
         })
         .catch(error => {
             console.log('error : ', error);
@@ -147,10 +127,7 @@ export default class ResetPassword extends LightningElement {
         this.firstTime = check;
 
         this.isResetting = false;
-        this.isReset = false;
         this.isError = false;
-        this.isTwo = false;
-        this.isThree = false;
         this.passwordsNotMatch = false;
         this.passwordsIsMatch = false;
         this.passwordFormat = false;
