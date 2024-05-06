@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>Footer</masterLabel>
+    <isExposed>true</isExposed>
+    <description>Message Channel for dynamic footer</description>
+     <lightningMessageFields>
+        <fieldName>isClicked</fieldName>
+        <description>This will tell us if we have clicked or not</description>
+    </lightningMessageFields>
+</LightningMessageChannel>
